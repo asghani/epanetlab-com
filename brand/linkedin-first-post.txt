@@ -1,0 +1,42 @@
+════════════════════════════════════════════════════════════════
+FIRST POST — LAUNCH ANNOUNCEMENT (recommended)
+════════════════════════════════════════════════════════════════
+
+The day has finally come. 🚀
+
+EPANetLab is LIVE — water modeling, right in your browser. Free, fast, local-first.
+
+Working as a water/wastewater/drainage design engineer, I've always felt the gap between powerful EPANET calculations and software that's actually pleasant to use. So I built my own answer:
+
+• Draw junctions, pipes, tanks, pumps and valves — visually, with snap-to-pipe
+• Import .inp, shapefiles and DXF plans (fillets, arcs, splines included)
+• Run steady-state & extended-period simulations instantly — EPANET engine in WebAssembly, no installs
+• See pressure, flow, velocity, head color-coded straight on the map
+• Export back to .inp — fully interoperable with the EPANET ecosystem
+
+No logins. No cloud required. Your models stay on your machine.
+
+👉 Open it today: https://app.epanetlab.com
+
+Built for engineers, utilities, educators and students. I'd love your feedback — try it, break it, tell me what to fix next.
+
+#EPANET #HydraulicModeling #WaterEngineering #CivilEngineering #WebAssembly #WaterModeling
+
+────────────────────────────────────────────────────────────────
+ALTERNATIVE — SHORT TEASER (if it goes live tomorrow instead)
+────────────────────────────────────────────────────────────────
+
+24 hours. ⏳
+
+Tomorrow, EPANETLab goes live — free, browser-based water modeling on the EPANET engine. No installs, no cloud, just open and model.
+
+Save the link so you're first in line: https://app.epanetlab.com
+
+#EPANET #HydraulicModeling #WaterEngineering
+
+────────────────────────────────────────────────────────────────
+POSTING TIPS
+────────────────────────────────────────────────────────────────
+• Attach the linkedin-banner.png to the announcement post (it has the logo, name, and "NOW LIVE" tag) and use linkedin-logo.png as your company/image avatar.
+• Post in the early morning (works well for your network timezone) — the countdown ends in ~24h, so schedule the announcement for right after the domain resolves.
+• Pin the launch post right after posting.

@@ -1,0 +1,7 @@
+EPANetLab is water modeling, right in your browser — free, fast, and local-first.
+
+EPANetLab brings browser-based hydraulic modeling to engineers, utilities and students. Powered by the trusted EPANET engine, it lets you draw, import and simulate water distribution networks without installing anything — no logins, no virtual machines, no cloud required.
+
+Draw junctions, pipes, tanks, pumps and valves visually. Import .inp files, shapefiles and DXF drawings as editable models or background layers. Run steady-state and extended-period simulations instantly in WebAssembly, and see pressure, flow, velocity and head color-coded straight on the map. Export back to .inp whenever you need to move models elsewhere.
+
+Built by a water, wastewater and drainage design engineer to close the gap between complex engineering calculations and clean, modern web software. Your models stay on your machine — local-first by default, free at the core.
