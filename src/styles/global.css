@@ -830,12 +830,22 @@ img {
 }
 
 @media (max-width: 400px) {
-  .brand span {
+  .brand {
+    font-size: 14px;
+    gap: 6px;
+  }
+
+  .brand img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .brand-dot {
     display: none;
   }
 
   .nav-right .btn {
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 7px 10px;
+    font-size: 11px;
   }
 }
