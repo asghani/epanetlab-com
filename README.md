@@ -2,7 +2,7 @@
 
 Marketing / landing site for [EPANETLab](https://epanetlab.com) — a browser-based
 hydraulic modeling tool for water distribution networks. This site powers the
-public homepage with a launch countdown for [app.epanetlab.com](https://app.epanetlab.com).
+public homepage for [app.epanetlab.com](https://app.epanetlab.com).
 
 Built with [Astro](https://astro.build). Static output, deployable on Vercel.
 
@@ -26,19 +26,21 @@ npm run preview  # preview the production build
 
 ```
 src/
-  pages/index.astro    # homepage (hero, countdown, features, FAQ)
+  pages/index.astro    # homepage (hero, features, founder, FAQ)
   components/Icon.astro
   styles/global.css
 public/
   favicon.svg          # EPANETLab app icon
   appicon.svg
+  founder.png          # founder photo (About section)
+  robots.txt
+  sitemap.xml
 ```
-
-The countdown anchors to `now + 10 days` on first visit and persists it in
-`localStorage`, so every visitor counts down to the same launch instant.
 
 ## Theme
 
-Colors and the droplet logo are pulled from the EPANETLab app (Vercel app
-`epanetlab-two.vercel.app`, source in the `HydroNet` repo). Primary accent is
-`#2563eb`; the logo uses the water-gradient `#4fc3f7 → #0277bd → #0d47a1`.
+Dark, engineering/technical design with blueprint grid textures, monospace
+accents, and a cyan "water" accent. Logo uses the water-gradient
+`#4fc3f7 → #0277bd → #0d47a1`. SEO is baked in: canonical URL, Open Graph /
+Twitter meta, JSON-LD `SoftwareApplication` structured data, `robots.txt` and
+`sitemap.xml`.

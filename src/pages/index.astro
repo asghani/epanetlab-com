@@ -2,6 +2,12 @@
 import "../styles/global.css";
 import Icon from "../components/Icon.astro";
 
+const appUrl = "https://app.epanetlab.com";
+const appUrlTxt = "app.epanetlab.com";
+const siteUrl = "https://epanetlab.com";
+const description =
+  "EPANetLab is a free, local-first, browser-based hydraulic modeling tool for water distribution networks. Draw, import and simulate pipes, tanks, pumps and valves with the EPANET engine — no installs, no cloud required.";
+
 const features = [
   {
     icon: "draw",
@@ -11,7 +17,7 @@ const features = [
   {
     icon: "import",
     title: "Import real plans",
-    text: "Upload shapefiles or DXF drawings — including fillets, arcs and splines — as editable models or colored background layers.",
+    text: "Upload .inp files, shapefiles or DXF drawings — including fillets, arcs and splines — as editable models or colored background layers.",
   },
   {
     icon: "run",
@@ -37,14 +43,17 @@ const features = [
 
 const audience = [
   {
+    code: "W01",
     title: "Utilities & consultants",
     text: "Build fast, run local. Everything you need to get the job done — none of the feature bloat.",
   },
   {
+    code: "W02",
     title: "Educators & professors",
     text: "Teach the concepts without fighting software. Students draw real networks and run sims in minutes, not hours.",
   },
   {
+    code: "W03",
     title: "Students & new engineers",
     text: "Focus on learning, not software quirks. Undo/redo, auto-elevations and visual overlays help you learn water modeling quickly.",
   },
@@ -52,16 +61,16 @@ const audience = [
 
 const faqs = [
   {
-    q: "What is EPANETLab?",
-    a: "EPANETLab is a browser-based hydraulic modeling tool for water distribution networks. Built on the trusted EPANET engine, it lets you draw, import, simulate and analyze your water network right in your browser — no installs, no virtual machines.",
+    q: "What is EPANetLab?",
+    a: "EPANetLab is a browser-based hydraulic modeling tool for water distribution networks. Built on the trusted EPANET engine, it lets you draw, import, simulate and analyze your water network right in your browser — no installs, no virtual machines.",
   },
   {
     q: "Do I need to install anything?",
-    a: "No. EPANETLab runs in any modern browser on Mac, Windows and Linux. When it launches, it works instantly — the EPANET solver is compiled to WebAssembly and runs right in your tab.",
+    a: "No. EPANetLab runs in any modern browser on Mac, Windows and Linux. It works instantly — the EPANET solver is compiled to WebAssembly and runs right in your tab.",
   },
   {
     q: "Is my data secure?",
-    a: "Yes. EPANETLab is local-first: your projects are saved in your browser by default and never leave your machine unless you choose to sync them.",
+    a: "Yes. EPANetLab is local-first: your projects are saved in your browser by default and never leave your machine unless you choose to sync them.",
   },
   {
     q: "Can I import my existing EPANET files?",
@@ -69,17 +78,41 @@ const faqs = [
   },
   {
     q: "Can I export to .inp?",
-    a: "Absolutely. The .inp exporter writes your model in standard EPANET format, so you can move between EPANETLab and other tools freely.",
+    a: "Absolutely. The .inp exporter writes your model in standard EPANET format, so you can move between EPANetLab and other tools freely.",
   },
   {
-    q: "How much will it cost?",
-    a: "EPANETLab launches as a free, open-source project. Pricing, if any premium features are added, will be announced after launch — the core modeling experience stays free.",
+    q: "How much does it cost?",
+    a: "EPANetLab is free and open-source. If premium features are added later, pricing will be announced then — the core modeling experience stays free.",
   },
 ];
 
-const countdownDays = 10;
-const launchUrl = "https://app.epanetlab.com";
-const appUrlTxt = "app.epanetlab.com";
+// Network diagram drawn as decorative "piping" for the hero / CTA backdrop.
+const heroNodes = [
+  [118, 126, 10],
+  [302, 64, 14],
+  [470, 176, 11],
+  [598, 96, 9],
+  [724, 198, 13],
+  [876, 118, 10],
+  [252, 268, 11],
+  [428, 254, 14],
+  [622, 300, 10],
+  [828, 306, 12],
+] as const;
+
+const heroLinks = [
+  [0, 1, 96],
+  [1, 2, 104],
+  [2, 3, 40],
+  [3, 4, 88],
+  [4, 5, 32],
+  [1, 6, 100],
+  [6, 7, 56],
+  [2, 7, 92],
+  [7, 8, 24],
+  [8, 4, 72],
+  [8, 9, 44],
+] as const;
 ---
 
 <!doctype html>
@@ -88,100 +121,142 @@ const appUrlTxt = "app.epanetlab.com";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <title>EPANetLab — Browser-based hydraulic modeling for water networks</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#060b17" />
+    <link rel="canonical" href={siteUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
-    <title>EPANETLab — Hydraulic modeling in your browser</title>
-    <meta
-      name="description"
-      content="Draw, import and simulate water distribution networks in your browser — powered by the EPANET engine. No installs, no cloud required. Free and open-source."
-    />
-    <meta property="og:title" content="EPANETLab — Hydraulic modeling in your browser" />
-    <meta
-      property="og:description"
-      content="From GIS data to a running model in minutes. Local-first, secure, and free. Launching at app.epanetlab.com."
-    />
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://epanetlab.com/" />
-    <meta property="og:image" content="/appicon.svg" />
+    <meta property="og:site_name" content="EPANetLab" />
+    <meta property="og:title" content="EPANetLab — Browser-based hydraulic modeling for water networks" />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:image" content={siteUrl + "/appicon.svg"} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="EPANetLab — Browser-based hydraulic modeling for water networks" />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={siteUrl + "/appicon.svg"} />
+
+    <!-- Structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: "EPANetLab",
+      url: siteUrl,
+      applicationCategory: "ScientificApplication",
+      operatingSystem: "Web",
+      browserRequirements: "Requires a modern web browser",
+      description,
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+      featuredLocation: { "@type": "Place", name: "Online" },
+      author: {
+        "@type": "Organization",
+        name: "EPANetLab",
+        url: siteUrl,
+      },
+    })} />
   </head>
   <body>
     <header class="site-header">
       <div class="container nav">
         <a class="brand" href="/">
-          <img src="/favicon.svg" alt="EPANETLab logo" width="30" height="30" />
-          EPANETLab.com
+          <img src="/favicon.svg" alt="EPANetLab logo" width="32" height="32" />
+          <span>EPANetLab<span class="brand-dot">.com</span></span>
         </a>
         <nav aria-label="Main">
           <ul class="nav-links">
             <li><a href="#features">Features</a></li>
-            <li><a href="#audience">Who it's for</a></li>
-            <li><a href="#launch">Launch</a></li>
+            <li><a href="#founder">Founder</a></li>
             <li><a href="#faq">FAQ</a></li>
           </ul>
         </nav>
-        <a class="btn btn-primary" href={launchUrl} target="_blank" rel="noopener">
-          Launch app
-        </a>
+        <div class="nav-right">
+          <span class="live-chip"><span class="dot" aria-hidden="true"></span> Live</span>
+          <a class="btn btn-primary" href={appUrl} target="_blank" rel="noopener">
+            Launch the app
+          </a>
+        </div>
       </div>
     </header>
 
     <main>
       <!-- ============================= HERO ============================= -->
       <section class="hero">
+        <div class="hero-grid" aria-hidden="true"></div>
         <div class="container">
-          <span class="badge"><span class="dot"></span> Launching at {appUrlTxt}</span>
+          <span class="badge">
+            <span class="dot" aria-hidden="true"></span> Live now — free, no account needed
+          </span>
           <h1>
-            Hydraulic modeling in your browser — <span class="grad">built on the EPANET you trust</span>
+            Hydraulic modeling in your browser, <span class="hl">on the EPANET engine</span>.
           </h1>
           <p class="sub">
             Draw, import and simulate water distribution networks in minutes —
-            local-first, secure, and free. No installs. No cloud required.
+            local-first, secure and free. No installs. No cloud required.
           </p>
           <div class="cta-row">
-            <a class="btn btn-primary" href="#launch">Get notified at launch</a>
-            <a class="btn btn-ghost" href="#features">See what it does</a>
+            <a class="btn btn-primary btn-lg" href={appUrl} target="_blank" rel="noopener">
+              Start modeling at {appUrlTxt}
+            </a>
+            <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
           </div>
+          <p class="mono hero-meta">MODEL.exe — steady-state &amp; extended-period · wasm in-browser · .inp in/out</p>
+        </div>
 
-          <div class="countdown-wrap" id="countdown">
-            <div class="countdown-label" id="countdown-label">
-              Launching in 10 days
-            </div>
-            <div class="countdown-grid">
-              <div class="count-item">
-                <div class="count-num" id="cd-days">–</div>
-                <div class="count-unit">Days</div>
-              </div>
-              <div class="count-item">
-                <div class="count-num" id="cd-hours">–</div>
-                <div class="count-unit">Hours</div>
-              </div>
-              <div class="count-item">
-                <div class="count-num" id="cd-min">–</div>
-                <div class="count-unit">Minutes</div>
-              </div>
-              <div class="count-item">
-                <div class="count-num" id="cd-sec">–</div>
-                <div class="count-unit">Seconds</div>
-              </div>
-            </div>
-            <div class="countdown-note">
-              When the timer hits zero, EPANETLab goes live at {appUrlTxt}.
-            </div>
-          </div>
+        <div class="hero-diagram" aria-hidden="true">
+          <svg viewBox="0 0 1000 360" class="pipe-svg">
+            <defs>
+              <linearGradient id="dash" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#22d3ee" stop-opacity="0.7" />
+                <stop offset="1" stop-color="#0ea5e9" stop-opacity="0.15" />
+              </linearGradient>
+            </defs>
+            {
+              heroLinks.map(([a, b, delay]) => {
+                const [x1, y1] = heroNodes[a]!;
+                const [x2, y2] = heroNodes[b]!;
+                return (
+                  <line
+                    x1={x1} y1={y1} x2={x2} y2={y2}
+                    stroke="url(#dash)" stroke-width="2" stroke-dasharray="3 7"
+                    style={`animation: flow 9s linear infinite; animation-delay: -${delay}s`}
+                  />
+                );
+              })
+            }
+            {
+              heroNodes.map(([cx, cy, r]) => (
+                <g>
+                  <circle cx={cx} cy={cy} r={r} fill="#0b1424" stroke="#164e63" stroke-width="1.5" />
+                  <circle cx={cx} cy={cy} r={3.5} fill="#22d3ee" opacity="0.9" />
+                </g>
+              ))
+            }
+          </svg>
         </div>
       </section>
 
       <!-- =========================== FEATURES =========================== -->
-      <section class="section section-gray" id="features">
+      <section class="section" id="features">
         <div class="container">
           <div class="section-head">
-            <span class="eyebrow">Features</span>
+            <span class="eyebrow">// capabilities</span>
             <h2>Built for working, not troubleshooting</h2>
             <p>
               An intuitive, modern interface that gets you to answers quickly —
@@ -190,8 +265,9 @@ const appUrlTxt = "app.epanetlab.com";
           </div>
           <div class="feature-grid">
             {
-              features.map((f) => (
+              features.map((f, i) => (
                 <article class="card">
+                  <div class="card-idx mono">0{i + 1}</div>
                   <div class="icon">
                     <Icon name={f.icon} />
                   </div>
@@ -205,16 +281,17 @@ const appUrlTxt = "app.epanetlab.com";
       </section>
 
       <!-- =========================== AUDIENCE =========================== -->
-      <section class="section" id="audience">
+      <section class="section section-dark" id="audience">
         <div class="container">
           <div class="section-head">
-            <span class="eyebrow">Who it's for</span>
+            <span class="eyebrow">// who it's for</span>
             <h2>One tool for the whole water community</h2>
           </div>
-          <div class="feature-grid">
+          <div class="audience-grid">
             {
               audience.map((a) => (
-                <article class="card">
+                <article class="spec">
+                  <div class="spec-code mono">{a.code} <span aria-hidden="true">/</span> SPEC</div>
                   <h3>{a.title}</h3>
                   <p>{a.text}</p>
                 </article>
@@ -224,18 +301,56 @@ const appUrlTxt = "app.epanetlab.com";
         </div>
       </section>
 
+      <!-- ============================ FOUNDER =========================== -->
+      <section class="section" id="founder">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">// about the founder</span>
+            <h2>Built by an engineer who works in the field</h2>
+          </div>
+          <div class="founder-card">
+            <img
+              src="/founder.png"
+              alt="Founder of EPANetLab, a water and wastewater design engineer"
+              class="founder-photo"
+              width="360"
+              height="360"
+              loading="lazy"
+            />
+            <div class="founder-body">
+              <span class="mono tag">// ENGINEER-A / founder</span>
+              <p>
+                EPANetLab was founded by a passionate water, wastewater, and
+                drainage design engineer dedicated to modernizing civil
+                infrastructure workflows. With a strong technical background in
+                environmental engineering and spatial data integration, the
+                founder built EPANetLab to bring fast, local-first, and
+                browser-based hydraulic modeling directly to engineers,
+                utilities, and students — bridging the gap between complex
+                engineering calculations and clean, modern web software.
+              </p>
+              <div class="founder-calls mono">
+                <span>ROLE_ water / wastewater / drainage design</span>
+                <span>FOCUS_ environmental eng + spatial data</span>
+                <span>GOAL_ modern hydraulic software for everyone</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ============================= CTA ============================= -->
-      <section class="section section-gray" id="launch">
+      <section class="section section-dark" id="launch">
         <div class="container">
           <div class="cta-banner">
+            <span class="eyebrow eyebrow-light">// ready when you are</span>
             <h2>Just open your browser and model.</h2>
             <p>
-              EPANETLab is launching soon at {appUrlTxt}. The countdown anchors
-              to {countdownDays} days from your first visit and ticks down to the
-              moment app.epanetlab.com goes live.
+              No installs, no logins, no cloud required. EPANetLab runs right
+              in your tab — launch the app and draw your first network today.
             </p>
-            <a class="btn" href={launchUrl} target="_blank" rel="noopener">
-              app.epanetlab.com
+            <a class="btn btn-light" href={appUrl} target="_blank" rel="noopener">
+              Launch at {appUrlTxt}
             </a>
           </div>
         </div>
@@ -245,7 +360,7 @@ const appUrlTxt = "app.epanetlab.com";
       <section class="section" id="faq">
         <div class="container">
           <div class="section-head">
-            <span class="eyebrow">FAQ</span>
+            <span class="eyebrow">// faq</span>
             <h2>Frequently asked questions</h2>
           </div>
           <ul class="faq">
@@ -264,11 +379,11 @@ const appUrlTxt = "app.epanetlab.com";
 
     <footer class="site-footer">
       <div class="container">
-        <div class="footer-grid">
+        <div class="footer-top">
           <div>
             <div class="footer-brand">
-              <img src="/favicon.svg" alt="EPANETLab logo" width="26" height="26" />
-              EPANETLab
+              <img src="/appicon.svg" alt="" width="28" height="28" />
+              <span>EPANetLab<span class="brand-dot">.com</span></span>
             </div>
             <p>
               A browser-based hydraulic modeling tool for water distribution
@@ -278,14 +393,12 @@ const appUrlTxt = "app.epanetlab.com";
           <div class="footer-col">
             <h4>Product</h4>
             <a href="#features">Features</a>
-            <a href="#audience">Who it's for</a>
-            <a href="#launch">Launch</a>
+            <a href="#founder">Founder</a>
             <a href="#faq">FAQ</a>
           </div>
           <div class="footer-col">
             <h4>App</h4>
-            <a href={launchUrl} target="_blank" rel="noopener">{appUrlTxt}</a>
-            <a href="https://github.com/asghani/HydroNet" target="_blank" rel="noopener">Source code</a>
+            <a href={appUrl} target="_blank" rel="noopener">{appUrlTxt}</a>
           </div>
           <div class="footer-col">
             <h4>Powered by</h4>
@@ -294,59 +407,10 @@ const appUrlTxt = "app.epanetlab.com";
           </div>
         </div>
         <div class="footer-bottom">
-          <span>© {new Date().getFullYear()} EPANETLab. All rights reserved.</span>
-          <span>Open source · Built for water modelers everywhere.</span>
+          <span>© {new Date().getFullYear()} EPANetLab. All rights reserved.</span>
+          <span class="mono">v0.1.0 · modern water modeling</span>
         </div>
       </div>
     </footer>
-
-    <script define:vars={{ countdownDays, launchUrl }}>
-      (() => {
-        const DAYS = countdownDays;
-        const KEY = "epanetlab-launch-anchor";
-
-        // Anchor the countdown so every visit counts down to the same launch
-        // instant (persisted per browser) instead of resetting each time.
-        let target = Number(localStorage.getItem(KEY)) || 0;
-        if (!target || target <= Date.now()) {
-          target = Date.now() + DAYS * 24 * 60 * 60 * 1000;
-          localStorage.setItem(KEY, String(target));
-        }
-
-        const $ = (id) => document.getElementById(id);
-        const daysEl = $("cd-days");
-        const hoursEl = $("cd-hours");
-        const minEl = $("cd-min");
-        const secEl = $("cd-sec");
-        const labelEl = $("countdown-label");
-        const pad = (n) => String(n).padStart(2, "0");
-        const clampZ = (n) => Math.max(0, n);
-
-        const tick = () => {
-          const diff = clampZ(target - Date.now());
-          const d = Math.floor(diff / 86400000);
-          const h = Math.floor((diff % 86400000) / 3600000);
-          const m = Math.floor((diff % 3600000) / 60000);
-          const s = Math.floor((diff % 60000) / 1000);
-          daysEl.textContent = String(d);
-          hoursEl.textContent = pad(h);
-          minEl.textContent = pad(m);
-          secEl.textContent = pad(s);
-          labelEl.textContent =
-            diff <= 0
-              ? "EPANETLab has launched!"
-              : d === 1
-                ? "Launching in 1 day"
-                : `Launching in ${d} days`;
-          document.title =
-            diff <= 0
-              ? "EPANETLab — launches today"
-              : `EPANETLab — launching in ${d} day${d === 1 ? "" : "s"}`;
-        };
-        tick();
-        const t = setInterval(tick, 1000);
-        t; // keep interval alive
-      })();
-    </script>
   </body>
 </html>
