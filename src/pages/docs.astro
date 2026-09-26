@@ -1,0 +1,866 @@
+---
+import "../styles/global.css";
+import Icon from "../components/Icon.astro";
+
+const appUrl = "https://app.epanetlab.com";
+const appUrlTxt = "app.epanetlab.com";
+const siteUrl = "https://epanetlab.com";
+const docsUrl = "https://epanetlab.com/docs/";
+const description =
+  "Complete user guide for EPANetLab, the free browser-based hydraulic modeling tool. Learn how to draw networks, import shapefiles and DXF, run simulations, and read results.";
+
+const toc = [
+  { id: "overview", label: "Overview" },
+  { id: "quick-start", label: "Quick Start" },
+  { id: "interface", label: "Interface Tour" },
+  { id: "drawing", label: "Drawing Tools" },
+  { id: "properties", label: "Setting Properties" },
+  { id: "simulation", label: "Hydraulic Simulation" },
+  { id: "flex-table", label: "Flex Table" },
+  { id: "import", label: "Import & Positioning" },
+  { id: "export", label: "Export" },
+  { id: "save-load", label: "Save, Load & Cloud Sync" },
+  { id: "views", label: "Views & Appearance" },
+  { id: "search", label: "Searching for Places" },
+  { id: "command-line", label: "The Command Line" },
+  { id: "shortcuts", label: "Keyboard Shortcuts" },
+  { id: "ai-assistant", label: "AI Assistant" },
+  { id: "privacy", label: "Privacy" },
+  { id: "faq", label: "FAQ & Troubleshooting" },
+  { id: "roadmap", label: "Getting Help & Roadmap" },
+];
+
+const tools = [
+  ["Select", "Select / inspect / drag elements. Hold Shift for multi-select; rubber-band drag selects a box of elements."],
+  ["Junction (J-)", "A consumption node. Set its elevation and base demand."],
+  ["Meter (M-)", "A customer meter — connects to pipes and carries a demand."],
+  ["Demand Ctr (DC-)", "A demand center — a spatial load zone whose demand is allocated to the nearest pipe end junctions."],
+  ["Tank (T-)", "A storage tank. Set elevation, initial / min / max level, and diameter."],
+  ["Reservoir (R-)", "An infinite supply source. Set its total head."],
+  ["Pipe (P-)", "Draws pipes. Three modes: chain (click junction to junction), straight (LINE, 2 clicks), polyline (PLINE, with bends)."],
+  ["Pump (PU-)", "Connects two nodes with a pump. Set its power."],
+  ["Valve (V-)", "Connects two nodes with a valve. Set diameter, type, and setting."],
+  ["Ruler", "Measure distances — click points; double-click to finish. Shows a running total on the map and status bar."],
+  ["Delete", "Delete an element (Delete / Backspace also works in Select mode)."],
+];
+
+const commands = [
+  ["HELP", "H, ?", "Show help"],
+  ["ERASE", "E, DEL, DELETE", "Delete selection"],
+  ["SELECT", "SEL", "Select elements"],
+  ["SELECTALL", "ALL, SELALL", "Select everything"],
+  ["DESELECT", "DESEL, NONE", "Clear selection"],
+  ["COPY", "CO, CP", "Copy selection"],
+  ["PASTE", "PA", "Paste"],
+  ["MOVE", "MO, M", "Move selection"],
+  ["STRETCH", "STR", "Stretch"],
+  ["OFFSET", "OFF, O", "Offset pipes"],
+  ["MERGE", "—", "Collapse nearby nodes"],
+  ["SPLIT", "—", "Splice a node onto a pipe"],
+  ["LINE", "L, LI", "Straight 2-click pipe"],
+  ["PLINE", "PL, POLYLINE", "Polyline pipe with bends"],
+  ["BEND", "ADDBEND", "Add a bend vertex"],
+  ["REMOVEBEND", "—", "Remove a bend vertex"],
+  ["FLATTEN", "REMOVEBENDS", "Remove all bends on a pipe"],
+  ["UNDO", "U", "Undo"],
+  ["REDO", "—", "Redo"],
+  ["REGEN", "REG", "Regenerate view"],
+  ["ZOOM", "Z", "in / out / extents / window"],
+  ["ZOOMIN / ZOOMOUT / ZOOMEXTENTS / ZOOMWINDOW", "ZI / ZO / ZE / ZW", "Zoom helpers"],
+  ["RULER", "DI, DIST, MEASURE", "Measure"],
+  ["UNITS", "UN, UNIT", "Switch SI / US"],
+  ["BASEMAP", "BASE, BM", "streets / satellite / blank"],
+  ["NORTH", "RN, N", "North-up view"],
+  ["PAN", "P", "Pan"],
+  ["SAVE", "—", "Save project"],
+  ["EXPORT", "SAVEAS", "Export project file"],
+  ["IMPORT", "OPEN", "Import project file"],
+  ["CLEAR", "CLS", "Clear network"],
+  ["EXIT", "QUIT, CLOSE", "Close"],
+];
+
+const shortcuts = [
+  ["Esc", "End a pipe run or dismiss the command line (1×); return to Select (2×)"],
+  ["Delete / Backspace", "Delete selection"],
+  ["Ctrl/Cmd + Z", "Undo"],
+  ["Ctrl/Cmd + Shift + Z or Ctrl/Cmd + Y", "Redo"],
+  ["Ctrl/Cmd + A", "Select all"],
+  ["Ctrl/Cmd + S", "Save project"],
+  ["R", "North-up view"],
+  ["/", "Open the command line"],
+  ["Space", "Repeat last command"],
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Documentation — EPANetLab</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-DYJ6PW4HG2"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-DYJ6PW4HG2');
+    </script>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#060b17" />
+    <link rel="canonical" href={docsUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="EPANetLab" />
+    <meta property="og:title" content="Documentation — EPANetLab" />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={docsUrl} />
+    <meta property="og:image" content={siteUrl + "/logo.png"} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Documentation — EPANetLab" />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={siteUrl + "/logo.png"} />
+
+    <!-- Structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      headline: "EPANetLab Documentation",
+      description,
+      url: docsUrl,
+      author: { "@type": "Organization", name: "EPANetLab", url: siteUrl },
+      publisher: { "@type": "Organization", name: "EPANetLab", url: siteUrl, logo: { "@type": "ImageObject", url: siteUrl + "/logo.png" } },
+    })} />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <a class="brand" href="/">
+          <img src="/logo.png" alt="EPANetLab logo" width="32" height="32" />
+          <span>EPANetLab<span class="brand-dot">.com</span></span>
+        </a>
+        <nav aria-label="Main">
+          <ul class="nav-links">
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#founder">Founder</a></li>
+            <li><a href="/#faq">FAQ</a></li>
+            <li><a href="/docs/" class="nav-active">Docs</a></li>
+          </ul>
+        </nav>
+        <div class="nav-right">
+          <span class="live-chip"><span class="dot" aria-hidden="true"></span> Live</span>
+          <a class="btn btn-primary" href={appUrl} target="_blank" rel="noopener">
+            Launch the app
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs">
+      <aside class="docs-toc" aria-label="Documentation contents">
+        <div class="toc-inner">
+          <span class="eyebrow">User Guide</span>
+          <nav>
+            {toc.map((t, i) => (
+              <a href={`#${t.id}`}><span class="toc-num">{String(i + 1).padStart(2, "0")}</span>{t.label}</a>
+            ))}
+          </nav>
+        </div>
+      </aside>
+
+      <main class="docs-body">
+        <span class="eyebrow">EPANetLab</span>
+        <h1>User documentation</h1>
+        <p class="docs-lede">
+          A browser-based hydraulic modeling tool for water distribution networks. It runs the
+          EPANET 2.2 solver (compiled to WebAssembly) entirely in your browser — no installation,
+          no servers, and no account needed for local work.
+        </p>
+
+        <!-- 1. Overview -->
+        <section id="overview" class="docs-section">
+          <h2>1. Overview</h2>
+          <p>
+            EPANetLab lets you draw a water distribution network on a real map, set the properties
+            of every element, run a steady-state hydraulic simulation, and see the results
+            color-coded across the map.
+          </p>
+          <h3>Key capabilities</h3>
+          <ul>
+            <li>Draw and edit junctions, pipes, tanks, reservoirs, pumps, valves, meters and demand centers on a MapLibre map.</li>
+            <li>Import shapefiles, DXF drawings, and CSV junction lists as editable models.</li>
+            <li>Import terrain (TREX / LandXML / DXF) to auto-assign ground elevations.</li>
+            <li>Run the EPANET 2.2 steady-state solver in-browser via a Web Worker.</li>
+            <li>Visualize pressure (node circles) and flow (link colors) with legends.</li>
+            <li>Edit element properties and results in a spreadsheet-style Flex Table.</li>
+            <li>Save projects to browser storage, or sign in to sync them to the cloud.</li>
+            <li>Export EPANET <code>.inp</code>, project JSON, and node-position CSV.</li>
+            <li>Control nearly everything from an AutoCAD-style command line.</li>
+            <li>Use an optional AI assistant (bring-your-own-key) to build, edit, and analyze the model.</li>
+            <li>Switch units (SI / US), basemaps (Streets / Satellite / Blank), themes, and label overlays.</li>
+          </ul>
+          <h3>What it is not</h3>
+          <ul>
+            <li>EPANetLab runs <b>steady-state analysis only</b> — no extended-period (time-series) simulation yet.</li>
+            <li>It is an <b>educational / exploratory tool</b>, not certified for production engineering work.</li>
+            <li>No model data is uploaded for ordinary use; the AI assistant talks only to the provider you choose.</li>
+          </ul>
+        </section>
+
+        <!-- 2. Quick Start -->
+        <section id="quick-start" class="docs-section">
+          <h2>2. Quick Start — first network in 60 seconds</h2>
+          <ol>
+            <li>Open <a href={appUrl} target="_blank" rel="noopener">{appUrlTxt}</a>.</li>
+            <li>On the <b>Layout</b> toolbar, click <b>Reservoir</b> and place it on the map.</li>
+            <li>Click <b>Junction</b> and place 3–4 junctions in a line downhill from the reservoir.</li>
+            <li>Click <b>Pipe</b>, then click the reservoir and each junction in turn (a chained run). Press <b>Esc</b> once to finish the run.</li>
+            <li>Click <b>Run</b> (top-right). The map fills with colored results.</li>
+            <li>Open the right-hand <b>Results</b> panel to see min/max pressure, total demand, peak flow, and peak velocity.</li>
+          </ol>
+          <p>
+            The default pipe diameter is 75&nbsp;mm (SI) or 3&nbsp;in (US); default roughness is
+            Hazen-Williams C. Change any of these in the Properties panel.
+          </p>
+        </section>
+
+        <!-- 3. Interface -->
+        <section id="interface" class="docs-section">
+          <h2>3. Interface Tour</h2>
+          <h3>Toolbar (top)</h3>
+          <p>
+            Three tabs — <b>Layout</b>, <b>Project</b>, <b>View</b> — plus a right-side group that
+            is always visible: the AI assistant toggle, <b>Run</b>, and Clear network.
+          </p>
+          <h3>Left panel (Properties / Backgrounds / Flex Table)</h3>
+          <p>
+            Switched with the three-icon rail on the far left:
+            <b>Properties</b> (network summary or the selected element's form, plus its simulation
+            results), <b>Backgrounds</b> (non-editable reference layers), and <b>Flex Table</b>
+            (all elements in a spreadsheet). At most one panel is open at a time; on small screens
+            they become overlays.
+          </p>
+          <h3>Results panel (right)</h3>
+          <p>Summary cards, pressure legend, simulation status, and Clear results.</p>
+          <h3>Map area</h3>
+          <p>
+            Interactive map with the floating <b>Search</b> box (top-left) and the
+            <b>Command Line</b> (bottom).
+          </p>
+          <h3>Status bar (bottom)</h3>
+          <p>Current tool, node/link counts, terrain name, ruler readout, selection count, and shortcut hints.</p>
+        </section>
+
+        <!-- 4. Drawing -->
+        <section id="drawing" class="docs-section">
+          <h2>4. Drawing Tools (Layout tab)</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Tool</th><th>What it does</th></tr></thead>
+              <tbody>
+                {tools.map(([name, desc]) => (
+                  <tr><td class="mono tool-name">{name}</td><td>{desc}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p>
+            <b>Pipes:</b> in the default chain mode, each click places a new junction and chains a
+            pipe to it. Press <b>Esc</b> once to end a run; twice returns to Select. Pipe bends are
+            shown as drag handles; use the <code>BEND</code>, <code>REMOVEBEND</code>, and
+            <code>FLATTEN</code> commands to manage bend vertices.
+          </p>
+          <p>
+            <b>Snapping:</b> clicks near an existing node snap to it automatically, so pipes connect
+            cleanly and duplicate nodes merge.
+          </p>
+        </section>
+
+        <!-- 5. Properties -->
+        <section id="properties" class="docs-section">
+          <h2>5. Setting Properties</h2>
+          <p>Select an element on the map and edit it in the <b>Properties</b> panel:</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Element</th><th>Editable properties</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">Junction</td><td>Elevation, Base demand</td></tr>
+                <tr><td class="mono">Meter</td><td>Elevation, Customer demand</td></tr>
+                <tr><td class="mono">Demand Ctr</td><td>Total demand (allocated to nearest pipe ends)</td></tr>
+                <tr><td class="mono">Tank</td><td>Elevation, Initial level, Min level, Max level, Diameter</td></tr>
+                <tr><td class="mono">Reservoir</td><td>Total head</td></tr>
+                <tr><td class="mono">Pipe</td><td>Length, Diameter, Roughness (Hazen-Williams C)</td></tr>
+                <tr><td class="mono">Pump</td><td>Power</td></tr>
+                <tr><td class="mono">Valve</td><td>Diameter, Type (PRV / PSV / PBV / FCV / TCV / GPV), Setting</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Values are typed in the units set in the View tab (SI or US) and converted internally.
+            Element IDs use friendly prefixes (J-, M-, DC-, T-, R-, P-, PU-, V-) with incrementing numbers.
+          </p>
+        </section>
+
+        <!-- 6. Simulation -->
+        <section id="simulation" class="docs-section">
+          <h2>6. Hydraulic Simulation</h2>
+          <p>
+            Click <b>Run</b> (top-right) to run a steady-state analysis. The solver has a 30-second
+            timeout; a network needs <b>at least one reservoir or tank</b> and <b>at least one pipe</b>.
+          </p>
+          <h3>Results you get</h3>
+          <ul>
+            <li><b>Per node:</b> pressure, head, demand (negative demand = inflow at the source).</li>
+            <li><b>Per link:</b> flow, velocity, head loss.</li>
+            <li><b>Results panel cards:</b> Min pressure, Max pressure, Total demand, Peak flow, Peak velocity.</li>
+            <li><b>Status:</b> Ready / Running / Converged / warnings / error; the raw solver report is captured internally.</li>
+          </ul>
+          <h3>Map visualization</h3>
+          <ul>
+            <li>Junction colors encode pressure: &lt;20 red, 20–40 orange, 40–70 yellow, 70–100 green, &gt;100 blue.</li>
+            <li>Link colors encode flow magnitude (5-step blue ramp).</li>
+            <li>Node IDs appear from zoom 14; link IDs from zoom 15.</li>
+          </ul>
+          <h3>Reading the results</h3>
+          <p>
+            "Simulation completed with warnings" — a banner appears; open the report or inspect
+            low-pressure nodes. Use the Results panel legend to judge whether pressures fall in an
+            acceptable service range for the scenario being studied.
+          </p>
+        </section>
+
+        <!-- 7. Flex Table -->
+        <section id="flex-table" class="docs-section">
+          <h2>7. Flex Table (spreadsheet editing)</h2>
+          <p>
+            Open the <b>Flex Table</b> from the left rail. It has tabs for
+            <b>Junctions, Tanks, Reservoirs, Pipes, Pumps, Valves</b>.
+          </p>
+          <ul>
+            <li>Click any value cell to edit inline.</li>
+            <li><b>Enter</b> / <b>↓</b> moves down; <b>Esc</b> cancels.</li>
+            <li>Columns show geometry and results (Pipes: Length, Diameter, Roughness C, Flow, Velocity — Junctions: Elevation, Demand, Pressure, Longitude, Latitude).</li>
+            <li>Sort any column by its header; use the "Filter rows…" box to find elements.</li>
+            <li>Double-click a row to zoom to that element; Shift/Ctrl for multi-select.</li>
+            <li>If a terrain surface is loaded, an "Apply elevations" action appears.</li>
+          </ul>
+        </section>
+
+        <!-- 8. Import -->
+        <section id="import" class="docs-section">
+          <h2>8. Import & Positioning</h2>
+          <p>All imports live on the <b>Project</b> tab.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Feature</th><th>Files</th><th>Result</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">Import shapefile</td><td>.zip / .shp/.dbf/.shx/.prj/.cpg</td><td>Points become junctions, lines become pipes — an editable network, then the camera fits</td></tr>
+                <tr><td class="mono">Import DXF</td><td>.dxf</td><td>Same as shapefile; arcs are tessellated into pipe bends</td></tr>
+                <tr><td class="mono">Import CSV</td><td>.csv</td><td>Junctions from Label/X/Y/Elevation/Demand columns</td></tr>
+                <tr><td class="mono">Load Builder</td><td>.csv / .txt</td><td>Assign demands to junctions / meters / demand centers</td></tr>
+                <tr><td class="mono">TERRAIN (TREX)</td><td>.xml / .landxml / .dxf</td><td>Terrain TIN surface; auto-assigns junction ground elevations</td></tr>
+                <tr><td class="mono">Open project</td><td>.json</td><td>Full project restore (validated)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Positioning dialog</h3>
+          <p>
+            Files already in WGS84 lat/lon (with a <code>.prj</code>) import directly and are framed.
+            Projected files open the <b>Position file</b> dialog: choose a UTM zone 1–60 (or
+            "Use current map location"), hemisphere, and units; then import. Terrain adds a
+            <b>"Fit to network"</b> option and an <b>Apply elevations</b> step later.
+          </p>
+          <h3>Background layers (non-editable)</h3>
+          <p>
+            From the <b>Backgrounds</b> panel you can also add shapefile / DXF layers strictly as
+            reference (water mains, cadastral maps). Each layer has show/hide, a color picker,
+            opacity, zoom-to-layer, and remove. Polygons from imports become ring outlines.
+          </p>
+          <p class="note">
+            Importing an EPANET <code>.inp</code> file is not yet supported (<code>.inp</code> is
+            generated internally for the solver and available for export). Use a shapefile, DXF, or
+            CSV, or re-draw.
+          </p>
+        </section>
+
+        <!-- 9. Export -->
+        <section id="export" class="docs-section">
+          <h2>9. Export</h2>
+          <h3>EPANET .inp</h3>
+          <p>
+            <b>Project → Export EPANET .inp</b> downloads <code>epanetlab.inp</code>, honoring your
+            unit system (flow keyword LPS for SI, CFS for US). Meters are exported as standard
+            junctions; demand centers are allocated to the nearest pipe end junctions.
+          </p>
+          <h3>Project JSON</h3>
+          <p>
+            <b>Export</b> saves the full project (nodes, links, basemap, backgrounds, units) as a
+            shareable JSON snapshot you can re-import later. Terrain surfaces are not included.
+          </p>
+          <h3>Node positions CSV</h3>
+          <p>
+            Exports <code>Label, X, Y, Type, Elevation_m, Demand_LPS</code> — designed to bring node
+            positions into AutoCAD for labeling.
+          </p>
+        </section>
+
+        <!-- 10. Save/Load -->
+        <section id="save-load" class="docs-section">
+          <h2>10. Save, Load & Cloud Sync</h2>
+          <ul>
+            <li><b>Autosave:</b> your working session is continuously saved (500 ms debounce, also flushed when you leave the tab) and restored on the next open.</li>
+            <li><b>Named projects:</b> Save prompts for a name; Load lists them; delete from the list. Stored in browser storage.</li>
+            <li><b>Cloud sync:</b> sign in to sync projects to the cloud (Supabase + PostGIS) — Load then merges local and cloud projects.</li>
+          </ul>
+          <h3>Signing in</h3>
+          <ol>
+            <li>Click <b>☁ Sign in</b> in the toolbar.</li>
+            <li>Enter your email — you receive a 6-digit code / magic link (no password).</li>
+            <li>Signed-in state shows as <b>☁ your-email</b>; click it to sign out.</li>
+          </ol>
+          <p>
+            Cloud sync is optional; all drawing, simulation, and local save work without an account.
+            Synced networks also enable spatial queries for the AI assistant.
+          </p>
+        </section>
+
+        <!-- 11. Views -->
+        <section id="views" class="docs-section">
+          <h2>11. Views & Appearance</h2>
+          <ul>
+            <li><b>Basemaps</b> (View tab): Streets (OSM), Satellite (Esri imagery), or Blank.</li>
+            <li><b>Place-name labels overlay:</b> an optional label layer above the basemap but under the network.</li>
+            <li><b>Units:</b> SI (m, mm, cumec) or US (ft, in, cusec, psi). Stored internally as SI, converted for display; applies to drawing, properties, results, and .inp export.</li>
+            <li><b>Themes:</b> Light / Dark / Auto (system), plus 9 accent presets or a custom color. Persisted and applied before first paint to avoid flashing.</li>
+          </ul>
+        </section>
+
+        <!-- 12. Search -->
+        <section id="search" class="docs-section">
+          <h2>12. Searching for Places</h2>
+          <p>
+            Use the <b>Search</b> box (top-left, "Search places (powered by OSM)"). Type a place
+            name, press Enter, and pick one of up to 6 results — the map flies to it. This uses the
+            public OpenStreetMap Nominatim geocoder. The Flex Table has its own "Filter rows…" box
+            for finding elements.
+          </p>
+        </section>
+
+        <!-- 13. Command Line -->
+        <section id="command-line" class="docs-section">
+          <h2>13. The Command Line</h2>
+          <p>
+            An AutoCAD-style prompt sits at the bottom of the map. Press any character (or <code>/</code>)
+            to start typing; <b>Enter</b> runs, <b>↑ / ↓</b> scrolls suggestions and history,
+            <b>Tab</b> completes, <b>Esc</b> exits.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Command</th><th>Aliases</th><th>Purpose</th></tr></thead>
+              <tbody>
+                {commands.map(([cmd, aliases, purpose]) => (
+                  <tr><td class="mono">{cmd}</td><td class="mono">{aliases}</td><td>{purpose}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p><b>Space</b> repeats the last command (AutoCAD behavior); typing most keys opens the command line.</p>
+        </section>
+
+        <!-- 14. Shortcuts -->
+        <section id="shortcuts" class="docs-section">
+          <h2>14. Keyboard Shortcuts</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Keys</th><th>Action</th></tr></thead>
+              <tbody>
+                {shortcuts.map(([keys, action]) => (
+                  <tr><td class="mono">{keys}</td><td>{action}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p>Undo history holds up to 50 steps of node + link snapshots.</p>
+        </section>
+
+        <!-- 15. AI Assistant -->
+        <section id="ai-assistant" class="docs-section">
+          <h2>15. AI Assistant</h2>
+          <p>
+            The chat panel (toolbar chat icon) is an optional, <b>bring-your-own-key</b> assistant.
+            Keys are stored only in your browser, and requests go directly from your browser to the
+            provider. There are no EPANetLab servers.
+          </p>
+          <h3>Providers</h3>
+          <ul>
+            <li><b>Google Gemini (free tier)</b> — default; free key from AI Studio.</li>
+            <li><b>OpenRouter (free models)</b> — auto-selects a current free model.</li>
+            <li><b>Ollama (local, no key)</b> — run models on your machine.</li>
+            <li><b>LM Studio (local, no key)</b></li>
+            <li><b>OpenAI (paid)</b></li>
+            <li><b>Anthropic Claude (paid)</b></li>
+            <li><b>Custom OpenAI-compatible</b> — any endpoint (vLLM, LiteLLM, Together, DeepSeek…)</li>
+          </ul>
+          <h3>What it can do</h3>
+          <ul>
+            <li>Summarize the current model and its simulation status.</li>
+            <li>Build a network (add junctions, tanks, reservoirs, pipes, pumps, valves).</li>
+            <li>Edit or delete elements and set properties.</li>
+            <li>Run the simulation and interpret results (e.g. "which nodes have low pressure?").</li>
+            <li>Run spatial queries against your synced network (elements within a radius, network length within a region).</li>
+          </ul>
+          <p>
+            Try the four example prompts shown in the empty chat. The chat digests the current model
+            automatically, so answers stay grounded in your actual network.
+          </p>
+        </section>
+
+        <!-- 16. Privacy -->
+        <section id="privacy" class="docs-section">
+          <h2>16. Privacy</h2>
+          <ul>
+            <li>The app is <b>private and not open source</b>; the repository is not distributed.</li>
+            <li>Drawing, simulation, and saving happen on your device. Autosave and named projects stay in browser storage.</li>
+            <li>Basic page-usage analytics (Google Analytics) collect only visit statistics for the site owner; no model data is transmitted.</li>
+            <li>Optional email sign-in (magic-link, no password) enables cloud sync via Supabase.</li>
+            <li>The AI assistant only talks to the provider you configure; keys never leave your browser.</li>
+            <li>The app is an educational tool — not certified for production engineering work.</li>
+          </ul>
+        </section>
+
+        <!-- 17. FAQ -->
+        <section id="faq" class="docs-section">
+          <h2>17. FAQ & Troubleshooting</h2>
+          <dl class="doc-faq">
+            <dt>The simulation won't run.</dt>
+            <dd>You need at least one reservoir or tank and at least one pipe. An alert appears if either is missing.</dd>
+            <dt>"Simulation completed with warnings."</dt>
+            <dd>Check the results panel and inspect low-pressure nodes (red) or high velocities. The solver report text is captured internally.</dd>
+            <dt>My imported drawing is in the wrong place.</dt>
+            <dd>Un-projected files cannot be positioned automatically — use the Positioning dialog (UTM zone / hemisphere / units) or "Use current map location", then drag on the map.</dd>
+            <dt>Where did my project go?</dt>
+            <dd>Autosave restores your last working session. Named projects are under Load; cloud copies appear there too when signed in.</dd>
+            <dt>How do I label nodes in AutoCAD?</dt>
+            <dd>Use Export node positions CSV.</dd>
+            <dt>Can I import an .inp file?</dt>
+            <dd>Not yet — export is supported; import is planned.</dd>
+            <dt>Why is pressure shown in meters rather than psi?</dt>
+            <dd>Result units follow the View tab unit system (SI vs US).</dd>
+          </dl>
+        </section>
+
+        <!-- 18. Roadmap -->
+        <section id="roadmap" class="docs-section">
+          <h2>18. Getting Help & Roadmap</h2>
+          <ul>
+            <li>Live app: <a href={appUrl} target="_blank" rel="noopener">{appUrlTxt}</a></li>
+            <li>Website: <a href={siteUrl} target="_blank" rel="noopener">epanetlab.com</a></li>
+          </ul>
+          <p>
+            Export and import, GIS data handling, terrain elevations, and AI-assisted modeling are
+            the fastest-moving areas — check the website for what ships next. For professional,
+            supported, production water-distribution modeling, consider commercial products built on
+            the same toolkit (<a href="https://epanetjs.com" target="_blank" rel="noopener">epanetjs.com</a>).
+          </p>
+          <div class="docs-cta">
+            <a class="btn btn-primary" href={appUrl} target="_blank" rel="noopener">
+              Launch the app at {appUrlTxt}
+            </a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-top">
+          <div>
+            <div class="footer-brand">
+              <img src="/logo.png" alt="" width="28" height="28" />
+              <span>EPANetLab<span class="brand-dot">.com</span></span>
+            </div>
+            <p>
+              A browser-based hydraulic modeling tool for water distribution
+              networks. Local-first and free.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Product</h4>
+            <a href="/#features">Features</a>
+            <a href="/#founder">Founder</a>
+            <a href="/#faq">FAQ</a>
+          </div>
+          <div class="footer-col">
+            <h4>App</h4>
+            <a href={appUrl} target="_blank" rel="noopener">{appUrlTxt}</a>
+            <a href="/docs/">Documentation</a>
+          </div>
+          <div class="footer-col">
+            <h4>Powered by</h4>
+            <a href="https://epanetjs.com" target="_blank" rel="noopener">EPANet.js solver</a>
+            <a href="https://maplibre.org" target="_blank" rel="noopener">MapLibre</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© {new Date().getFullYear()} EPANetLab. All rights reserved.</span>
+          <span>v0.1.0 · Modern water modeling</span>
+        </div>
+      </div>
+    </footer>
+
+    <style>
+      .nav-active {
+        color: var(--ink) !important;
+      }
+
+      .docs {
+        display: grid;
+        grid-template-columns: 264px minmax(0, 1fr);
+        gap: 48px;
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 56px 24px 96px;
+      }
+
+      .docs-toc {
+        position: relative;
+      }
+
+      .toc-inner {
+        position: sticky;
+        top: 96px;
+        max-height: calc(100vh - 130px);
+        overflow-y: auto;
+        padding-right: 8px;
+      }
+
+      .toc-inner .eyebrow {
+        margin-bottom: 18px;
+      }
+
+      .toc-inner nav {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        border-left: 1px solid var(--border);
+      }
+
+      .toc-inner nav a {
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+        font-size: 13.5px;
+        color: var(--ink-muted);
+        padding: 6px 14px;
+        border-left: 2px solid transparent;
+        margin-left: -1px;
+        transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+      }
+
+      .toc-inner nav a:hover {
+        color: var(--ink);
+        border-color: var(--accent-dim);
+      }
+
+      .toc-inner nav a:target,
+      .toc-inner nav a.active {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+
+      .toc-num {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--ink-faint);
+        min-width: 18px;
+      }
+
+      .docs-body {
+        min-width: 0;
+      }
+
+      .docs-body .eyebrow {
+        margin-bottom: 14px;
+      }
+
+      .docs-body h1 {
+        font-size: clamp(28px, 4vw, 40px);
+        font-weight: 700;
+      }
+
+      .docs-lede {
+        margin-top: 16px;
+        font-size: 17px;
+        color: var(--ink-muted);
+        padding-bottom: 28px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .docs-section {
+        padding: 44px 0 10px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .docs-section h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+
+      .docs-section h3 {
+        font-size: 16.5px;
+        font-weight: 700;
+        margin: 24px 0 10px;
+        color: var(--accent-ink);
+      }
+
+      .docs-section p,
+      .docs-section li,
+      .docs-section dd {
+        font-size: 15px;
+        color: var(--ink-muted);
+        line-height: 1.75;
+      }
+
+      .docs-section p {
+        margin: 10px 0;
+      }
+
+      .docs-section ul,
+      .docs-section ol {
+        margin: 10px 0;
+        padding-left: 22px;
+      }
+
+      .docs-section li {
+        margin: 6px 0;
+      }
+
+      .docs-section code {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        color: var(--accent-ink);
+        background: rgba(34, 211, 238, 0.08);
+        border: 1px solid rgba(34, 211, 238, 0.2);
+        border-radius: 4px;
+        padding: 1px 6px;
+        white-space: nowrap;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        margin: 14px 0;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+
+      .docs-section table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        background: var(--bg-panel);
+      }
+
+      .docs-section th {
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--ink-faint);
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+
+      .docs-section td {
+        padding: 10px 14px;
+        border-top: 1px solid var(--border);
+        color: var(--ink-muted);
+        vertical-align: top;
+      }
+
+      .docs-section tbody tr:first-child td {
+        border-top: none;
+      }
+
+      .docs-section tbody tr:hover td {
+        background: var(--bg-raised);
+      }
+
+      .tool-name {
+        white-space: nowrap;
+        color: var(--ink);
+      }
+
+      p.note {
+        border-left: 3px solid var(--accent-dim);
+        background: var(--bg-panel);
+        border-radius: 0 6px 6px 0;
+        padding: 12px 16px;
+      }
+
+      .doc-faq dt {
+        font-weight: 700;
+        color: var(--ink);
+        font-size: 15px;
+        margin-top: 18px;
+      }
+
+      .doc-faq dd {
+        margin: 6px 0 0;
+      }
+
+      .docs-cta {
+        margin: 32px 0 12px;
+      }
+    </style>
+
+    <script is:inline>
+      (function () {
+        var links = Array.prototype.slice.call(
+          document.querySelectorAll(".toc-inner nav a")
+        );
+        if (!links.length || !("IntersectionObserver" in window)) return;
+        var map = {};
+        links.forEach(function (a) {
+          var id = a.getAttribute("href").slice(1);
+          var el = document.getElementById(id);
+          if (el) map[el.id] = a;
+        });
+        var sections = Object.keys(map).map(function (id) {
+          return document.getElementById(id);
+        });
+        function onScroll() {
+          var current = null;
+          var pos = window.scrollY + 120;
+          sections.forEach(function (s) {
+            if (s.offsetTop <= pos) current = s.id;
+          });
+          links.forEach(function (a) {
+            a.classList.toggle(
+              "active",
+              a.getAttribute("href") === "#" + current
+            );
+          });
+        }
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+  </body>
+</html>
