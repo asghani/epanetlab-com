@@ -121,7 +121,7 @@ const heroLinks = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <title>EPANetLab — Browser-based hydraulic modeling for water networks</title>
+    <title>EPANet Lab</title>
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#060b17" />
@@ -137,7 +137,7 @@ const heroLinks = [
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="EPANetLab" />
-    <meta property="og:title" content="EPANetLab — Browser-based hydraulic modeling for water networks" />
+    <meta property="og:title" content="EPANet Lab" />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={siteUrl} />
     <meta property="og:image" content={siteUrl + "/logo.png"} />
@@ -145,7 +145,7 @@ const heroLinks = [
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="EPANetLab — Browser-based hydraulic modeling for water networks" />
+    <meta name="twitter:title" content="EPANet Lab" />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={siteUrl + "/logo.png"} />
 
@@ -173,6 +173,48 @@ const heroLinks = [
     })} />
   </head>
   <body>
+    <div id="loader" class="loader" aria-hidden="true">
+      <div class="loader-inner">
+        <div class="loader-mark">
+          <svg class="loader-pipes" viewBox="0 0 210 190" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <linearGradient id="lDash" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#22d3ee" stop-opacity="0.7" />
+                <stop offset="1" stop-color="#0ea5e9" stop-opacity="0.15" />
+              </linearGradient>
+              <radialGradient id="lGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.9" />
+                <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+
+            <!-- drop outline: flowing pipes -->
+            <line x1="105" y1="10" x2="72" y2="44" stroke="url(#lDash)" stroke-width="2" stroke-dasharray="4 8" class="l-pipe" style="animation-delay: 0s" />
+            <line x1="72" y1="44" x2="46" y2="86" stroke="url(#lDash)" stroke-width="2" stroke-dasharray="4 8" class="l-pipe" style="animation-delay: -0.6s" />
+            <line x1="46" y1="86" x2="34" y2="122" stroke="url(#lDash)" stroke-width="2" stroke-dasharray="4 8" class="l-pipe" style="animation-delay: -1.2s" />
+            <line x1="34" y1="122" x2="44" y2="154" stroke="url(#lDash)" stroke-width="2" stroke-dasharray="4 8" class="l-pipe" style="animation-delay: -1.8s" />
+            <line x1="44" y1="154" x2="105" y2="178" stroke="url(#lDash)" stroke-width="2" stroke-dasharray="4 8" class="l-pipe" style="animation-delay: -2.4s" />
+            <line x1="105" y1="178" x2="166" y2="154" stroke="url(#lDash)" stroke-width="2" stroke-dasharray="4 8" class="l-pipe" style="animation-delay: -3s" />
+            <line x1="166" y1="154" x2="176" y2="122" stroke="url(#lDash)" stroke-width="2" stroke-dasharray="4 8" class="l-pipe" style="animation-delay: -0.4s" />
+            <line x1="176" y1="122" x2="164" y2="86" stroke="url(#lDash)" stroke-width="2" stroke-dasharray="4 8" class="l-pipe" style="animation-delay: -1s" />
+            <line x1="164" y1="86" x2="138" y2="44" stroke="url(#lDash)" stroke-width="2" stroke-dasharray="4 8" class="l-pipe" style="animation-delay: -1.6s" />
+            <line x1="138" y1="44" x2="105" y2="10" stroke="url(#lDash)" stroke-width="2" stroke-dasharray="4 8" class="l-pipe" style="animation-delay: -2.2s" />
+
+            <!-- pulsing nodes -->
+            {[[105, 10], [72, 44], [46, 86], [34, 122], [44, 154], [105, 178], [166, 154], [176, 122], [164, 86], [138, 44]].map(([x, y], i) => (
+              <g>
+                <circle cx={x} cy={y} r="12" fill="url(#lGlow)" class="l-node-glow" style={`animation-delay: ${i * -0.5}s`} />
+                <circle cx={x} cy={y} r="5.5" fill="#0b1424" stroke="#22d3ee" stroke-width="1.5" />
+                <circle cx={x} cy={y} r="2.2" fill="#22d3ee" opacity="0.95" />
+              </g>
+            ))}
+          </svg>
+
+          <img src="/logo.png" alt="" width="86" height="86" class="loader-logo" />
+        </div>
+      </div>
+    </div>
+
     <header class="site-header">
       <div class="container nav">
         <a class="brand" href="/">
@@ -423,5 +465,34 @@ const heroLinks = [
         </div>
       </div>
     </footer>
+
+    <script is:inline>
+      (function () {
+        var loader = document.getElementById("loader");
+        if (!loader) return;
+        var minHold = 2600;
+        var hide = function () {
+          loader.classList.add("is-hidden");
+        };
+        var started = Date.now();
+        function hideAfter() {
+          var elapsed = Date.now() - started;
+          setTimeout(hide, Math.max(0, minHold - elapsed));
+        }
+        if (document.readyState === "complete") {
+          hideAfter();
+        } else {
+          window.addEventListener("load", hideAfter, { once: true });
+          setTimeout(hideAfter, minHold);
+        }
+        window.addEventListener(
+          "pageshow",
+          function () {
+            setTimeout(hideAfter, 400);
+          },
+          { once: true }
+        );
+      })();
+    </script>
   </body>
 </html>
