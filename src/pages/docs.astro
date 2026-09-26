@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Icon from "../components/Icon.astro";
+import Analytics from "@vercel/analytics/astro";
 
 const appUrl = "https://app.epanetlab.com";
 const appUrlTxt = "app.epanetlab.com";
@@ -99,6 +100,7 @@ const shortcuts = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>Documentation — EPANetLab</title>
+    <Analytics />
 
     <!-- Google tag (gtag.js) -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-DYJ6PW4HG2"></script>
