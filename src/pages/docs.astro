@@ -212,7 +212,7 @@ const shortcuts = [
             <li>Save projects to browser storage, or sign in to sync them to the cloud.</li>
             <li>Export EPANET <code>.inp</code>, project JSON, and node-position CSV.</li>
             <li>Control nearly everything from an AutoCAD-style command line.</li>
-            <li>Use an optional AI assistant (bring-your-own-key) to build, edit, and analyze the model.</li>
+            <li>Use an optional AI assistant (free, no key needed) to build, edit, and analyze the model.</li>
             <li>Switch units (SI / US), basemaps (Streets / Satellite / Blank), themes, and label overlays.</li>
           </ul>
           <h3>What it is not</h3>
@@ -503,13 +503,15 @@ const shortcuts = [
         <section id="ai-assistant" class="docs-section">
           <h2>15. AI Assistant</h2>
           <p>
-            The chat panel (toolbar chat icon) is an optional, <b>bring-your-own-key</b> assistant.
-            Keys are stored only in your browser, and requests go directly from your browser to the
-            provider. There are no EPANetLab servers.
+            The chat panel (toolbar chat icon) is an AI <b>modelling copilot</b>. By default it
+            uses <b>EPANetLab free (hosted)</b> mode: no key required — messages are routed through
+            a small server-side proxy holding a shared app-level Gemini key, with a limited daily
+            quota. You can also bring your own key with any other provider.
           </p>
           <h3>Providers</h3>
           <ul>
-            <li><b>Google Gemini (free tier)</b> — default; free key from AI Studio.</li>
+            <li><b>EPANetLab free (hosted)</b> — default; no key required.</li>
+            <li><b>Google Gemini (free tier)</b> — free key from AI Studio.</li>
             <li><b>OpenRouter (free models)</b> — auto-selects a current free model.</li>
             <li><b>Ollama (local, no key)</b> — run models on your machine.</li>
             <li><b>LM Studio (local, no key)</b></li>
@@ -539,7 +541,7 @@ const shortcuts = [
             <li>Drawing, simulation, and saving happen on your device. Autosave and named projects stay in browser storage.</li>
             <li>Basic page-usage analytics (Google Analytics) collect only visit statistics for the site owner; no model data is transmitted.</li>
             <li>Optional email sign-in (magic-link, no password) enables cloud sync via Supabase.</li>
-            <li>The AI assistant only talks to the provider you configure; keys never leave your browser.</li>
+            <li>In EPANetLab free (hosted) chat mode, messages pass through a minimal proxy with a shared app-level key; no personal key is used. With any other provider, keys never leave your browser.</li>
             <li>The app is an educational tool — not certified for production engineering work.</li>
           </ul>
         </section>
