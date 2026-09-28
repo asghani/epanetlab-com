@@ -76,6 +76,11 @@ const commands = [
   ["SAVE", "—", "Save project"],
   ["EXPORT", "SAVEAS", "Export project file"],
   ["IMPORT", "OPEN", "Import project file"],
+  ["DXFIN", "—", "Import a CAD drawing (.dxf) and position it"],
+  ["DXFOUT", "—", "Export a CAD drawing (.dxf) with annotations"],
+  ["KMLIN", "—", "Import a Google Earth KML/KMZ file"],
+  ["KMLOUT", "—", "Export the layout as .kml"],
+  ["KMZOUT", "—", "Export the layout as zipped .kmz"],
   ["CLEAR", "CLS", "Clear network"],
   ["EXIT", "QUIT, CLOSE", "Close"],
 ];
@@ -248,13 +253,13 @@ const shortcuts = [
             Three tabs — <b>Layout</b>, <b>Project</b>, <b>View</b> — plus a right-side group that
             is always visible: the AI assistant toggle, <b>Run</b>, and Clear network.
           </p>
-          <h3>Left panel (Properties / Backgrounds / Flex Table)</h3>
+          <h3>Left panel (Properties / Backgrounds / Symbology / Flex Table)</h3>
           <p>
-            Switched with the three-icon rail on the far left:
+            Switched with the four-icon rail on the far left:
             <b>Properties</b> (network summary or the selected element's form, plus its simulation
-            results), <b>Backgrounds</b> (non-editable reference layers), and <b>Flex Table</b>
-            (all elements in a spreadsheet). At most one panel is open at a time; on small screens
-            they become overlays.
+            results), <b>Backgrounds</b> (non-editable reference layers), <b>Symbology</b>
+            (annotation toggles and pipe color ranges), and <b>Flex Table</b> (all elements in a
+            spreadsheet). At most one panel is open at a time; on small screens they become overlays.
           </p>
           <h3>Results panel (right)</h3>
           <p>Summary cards, pressure legend, simulation status, and Clear results.</p>
@@ -335,6 +340,11 @@ const shortcuts = [
           <ul>
             <li>Junction colors encode pressure: &lt;20 red, 20–40 orange, 40–70 yellow, 70–100 green, &gt;100 blue.</li>
             <li>Link colors encode flow magnitude (5-step blue ramp).</li>
+            <li>
+              Optional thematic pipe coloring (Symbology tab) tints pipes by diameter, velocity,
+              flow, or head loss against user-defined color ranges — otherwise pipes stay
+              kind-colored (blue) or flow-colored after a run.
+            </li>
             <li>Node IDs appear from zoom 14; link IDs from zoom 15.</li>
           </ul>
           <h3>Reading the results</h3>
@@ -372,6 +382,7 @@ const shortcuts = [
               <tbody>
                 <tr><td class="mono">Import shapefile</td><td>.zip / .shp/.dbf/.shx/.prj/.cpg</td><td>Points become junctions, lines become pipes — an editable network, then the camera fits</td></tr>
                 <tr><td class="mono">Import DXF</td><td>.dxf</td><td>Same as shapefile; arcs are tessellated into pipe bends</td></tr>
+                <tr><td class="mono">Import KML / KMZ</td><td>.kml / .kmz</td><td>Google Earth layouts: Points become junctions, LineStrings become pipes, Polygon rings become boundary lines</td></tr>
                 <tr><td class="mono">Import CSV</td><td>.csv</td><td>Junctions from Label/X/Y/Elevation/Demand columns</td></tr>
                 <tr><td class="mono">Load Builder</td><td>.csv / .txt</td><td>Assign demands to junctions / meters / demand centers</td></tr>
                 <tr><td class="mono">TERRAIN (TREX)</td><td>.xml / .landxml / .dxf</td><td>Terrain TIN surface; auto-assigns junction ground elevations</td></tr>
@@ -381,10 +392,16 @@ const shortcuts = [
           </div>
           <h3>Positioning dialog</h3>
           <p>
-            Files already in WGS84 lat/lon (with a <code>.prj</code>) import directly and are framed.
-            Projected files open the <b>Position file</b> dialog: choose a UTM zone 1–60 (or
-            "Use current map location"), hemisphere, and units; then import. Terrain adds a
-            <b>"Fit to network"</b> option and an <b>Apply elevations</b> step later.
+            Files already in WGS84 lat/lon — shapefiles with a <code>.prj</code>, and KML/KMZ
+            (which are always lon/lat by the Google Earth spec) — import directly and are framed.
+            Projected files (unitless DXF, shapefiles without a <code>.prj</code>, or KML from
+            engineering tools that emits meters) open the <b>Position file</b> dialog: choose a UTM
+            zone 1–60 (or "Use current map location"), hemisphere, and units; then import. Terrain
+            adds a <b>"Fit to network"</b> option and an <b>Apply elevations</b> step later.
+          </p>
+          <p>
+            The same commands work from the command line: <code>DXFIN</code> imports a drawing and
+            <code>KMLIN</code> imports a KML/KMZ layout.
           </p>
           <h3>Background layers (non-editable)</h3>
           <p>
@@ -418,6 +435,26 @@ const shortcuts = [
             Exports <code>Label, X, Y, Type, Elevation_m, Demand_LPS</code> — designed to bring node
             positions into AutoCAD for labeling.
           </p>
+          <h3>CAD drawing (DXF)</h3>
+          <p>
+            <b>Export CAD (DXF)</b> in the toolbar — or the <code>DXFOUT</code> command — downloads a
+            DXF R12 drawing in meters. Junctions become <code>POINT</code>s, tanks and reservoirs
+            <code>CIRCLE</code>s, and pipes/pumps/valves <code>LINE</code>s on their own layers. The
+            annotation toggles from the Symbology tab control the <code>TEXT</code> entities: pipe
+            labels ("D 6.0 mm", "L 100.0 m", flow, velocity, head loss) sit at each pipe's midpoint,
+            junction labels/elevation/pressure/demand at each node, each property on its own
+            <code>ANN.*</code> layer. When thematic pipe coloring is active, pipe lines are tinted
+            to the nearest CAD color.
+          </p>
+          <h3>Google Earth (KML / KMZ)</h3>
+          <p>
+            <b>Export KML</b> in the toolbar — or <code>KMLOUT</code> / <code>KMZOUT</code> —
+            downloads the layout as a standard lon/lat <code>.kml</code> (or a zipped
+            <code>.kmz</code>). Every node becomes a <code>Point</code> placemark and every link a
+            <code>LineString</code> placemark. Each placemark's description carries the same
+            annotation text the map shows, and thematic pipe ranges set the line colors — handy for
+            reviewing the model in Google Earth or sharing a layout with non-Hydraulic viewers.
+          </p>
         </section>
 
         <!-- 10. Save/Load -->
@@ -449,6 +486,20 @@ const shortcuts = [
             <li><b>Units:</b> SI (m, mm, cumec) or US (ft, in, cusec, psi). Stored internally as SI, converted for display; applies to drawing, properties, results, and .inp export.</li>
             <li><b>Themes:</b> Light / Dark / Auto (system), plus 9 accent presets or a custom color. Persisted and applied before first paint to avoid flashing.</li>
           </ul>
+          <h3>Symbology panel (WaterGEMS-style)</h3>
+          <p>
+            The <b>Symbology</b> panel (fourth icon on the left rail) controls what the map labels
+            and how pipes are colored:
+          </p>
+          <ul>
+            <li><b>Pipe annotations:</b> diameter, length, flow, velocity, head loss — each a toggle. Simulation-dependent ones need a completed run.</li>
+            <li><b>Junction annotations:</b> label, elevation, pressure, demand — again all toggles.</li>
+            <li><b>Pipe color by range:</b> pick a property (diameter, velocity, flow, head loss) and define min/max/color bands, like "3 in → blue, 4 in → green, 6 in → yellow". Values outside every band use the "Outside ranges" color.</li>
+          </ul>
+          <p>
+            The same toggles drive the DXF and KML exports, so a drafting sheet or Google Earth file
+            shows exactly the labels you see on screen.
+          </p>
         </section>
 
         <!-- 12. Search -->
@@ -559,7 +610,9 @@ const shortcuts = [
             <dt>Where did my project go?</dt>
             <dd>Autosave restores your last working session. Named projects are under Load; cloud copies appear there too when signed in.</dd>
             <dt>How do I label nodes in AutoCAD?</dt>
-            <dd>Use Export node positions CSV.</dd>
+            <dd>Export node positions CSV, or export a DXF (<code>DXFOUT</code> / Export CAD button): it carries annotation text (diameter, length, elevation…) on separate <code>ANN.*</code> layers you can style or freeze.</dd>
+            <dt>Can I share the layout with Google Earth?</dt>
+            <dd>Yes — <code>KMLOUT</code> / <code>KMZOUT</code> (or Export KML) writes every node and pipe as a placemark with label text and themed colors.</dd>
             <dt>Can I import an .inp file?</dt>
             <dd>Not yet — export is supported; import is planned.</dd>
             <dt>Why is pressure shown in meters rather than psi?</dt>
