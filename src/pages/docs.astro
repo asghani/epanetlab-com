@@ -395,9 +395,16 @@ const shortcuts = [
             Files already in WGS84 lat/lon — shapefiles with a <code>.prj</code>, and KML/KMZ
             (which are always lon/lat by the Google Earth spec) — import directly and are framed.
             Projected files (unitless DXF, shapefiles without a <code>.prj</code>, or KML from
-            engineering tools that emits meters) open the <b>Position file</b> dialog: choose a UTM
+            engineering tools that emit meters) open the <b>Position file</b> dialog: choose a UTM
             zone 1–60 (or "Use current map location"), hemisphere, and units; then import. Terrain
             adds a <b>"Fit to network"</b> option and an <b>Apply elevations</b> step later.
+          </p>
+          <p>
+            You don't have to guess the zone when <em>exporting</em>: EPANetLab derives the zone
+            your drawing sits in, shows it in the status bar (e.g. <code>UTM 43N</code>), and writes
+            the drawing as real UTM meters with that zone tagged in the DXF header. Import that DXF
+            back — even in a fresh session — and the dialog is pre-filled with the zone the file
+            declares, so a network you export here re-imports exactly where it was.
           </p>
           <p>
             The same commands work from the command line: <code>DXFIN</code> imports a drawing and
