@@ -179,8 +179,8 @@ const shortcuts = [
       </div>
     </header>
 
-    <div class="docs">
-      <aside class="docs-toc" aria-label="Documentation contents">
+      <div class="docs">
+        <aside class="docs-toc" aria-label="Documentation contents">
         <div class="toc-inner">
           <span class="eyebrow">User Guide</span>
           <nav>
@@ -192,6 +192,10 @@ const shortcuts = [
       </aside>
 
       <main class="docs-body">
+        <a class="docs-back" href="/">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+          Back to epanetlab.com
+        </a>
         <span class="eyebrow">EPANetLab</span>
         <h1>User documentation</h1>
         <p class="docs-lede">
@@ -723,6 +727,22 @@ const shortcuts = [
         padding: 56px 24px 96px;
       }
 
+      /* "Back to site" — the global header hides .nav-links below 768px, so
+         without this there is no way back to the landing page on a phone. */
+      .docs-back {
+        display: none;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 22px;
+        font-size: 13.5px;
+        color: var(--ink-muted);
+        text-decoration: none;
+      }
+
+      .docs-back:hover {
+        color: var(--accent);
+      }
+
       .docs-toc {
         position: relative;
       }
@@ -941,6 +961,154 @@ const shortcuts = [
       * {
         scrollbar-width: thin;
         scrollbar-color: var(--border-strong) var(--bg);
+      }
+
+      /* --------------------------------------------------------------------- */
+      /* Responsive: single-column reading layout on tablet and phone          */
+      /* --------------------------------------------------------------------- */
+
+      /* Tablet: keep the rail but give the article room. */
+      @media (max-width: 1024px) {
+        .docs {
+          grid-template-columns: 216px minmax(0, 1fr);
+          gap: 32px;
+        }
+
+        .toc-inner nav a {
+          font-size: 13px;
+          padding: 6px 10px;
+        }
+      }
+
+      /* Phone / narrow: the rail becomes a horizontal, scrollable chip strip
+         above the article instead of a column stealing the whole width. */
+      @media (max-width: 820px) {
+        .docs {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 0;
+          padding: 20px 18px 64px;
+        }
+
+        .docs-back {
+          display: inline-flex;
+        }
+
+        /* Article first so the page opens on the title, not on navigation. */
+        .docs-body {
+          order: 1;
+        }
+
+        .docs-toc {
+          order: 2;
+          position: static;
+          margin-top: 8px;
+        }
+
+        .toc-inner {
+          position: static;
+          max-height: none;
+          overflow: visible;
+          padding: 18px 0 0;
+          border-top: 1px solid var(--border);
+        }
+
+        .toc-inner .eyebrow {
+          margin-bottom: 10px;
+        }
+
+        .toc-inner nav {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 6px;
+          border-left: 0;
+        }
+
+        .toc-inner nav a {
+          gap: 6px;
+          padding: 6px 11px;
+          border: 1px solid var(--border);
+          border-radius: 999px;
+          font-size: 12.5px;
+          white-space: nowrap;
+        }
+
+        /* With the rail inline there is no left border to align against. */
+        .toc-inner nav a:hover,
+        .toc-inner nav a:target,
+        .toc-inner nav a.active {
+          border-color: var(--accent);
+        }
+
+        .toc-num {
+          min-width: 0;
+        }
+
+        .docs-body h1 {
+          font-size: clamp(24px, 7vw, 32px);
+        }
+
+        .docs-lede {
+          font-size: 15.5px;
+          padding-bottom: 20px;
+        }
+
+        .docs-section {
+          padding: 30px 0 6px;
+        }
+
+        .docs-section h2 {
+          font-size: 20px;
+        }
+
+        .docs-section h3 {
+          font-size: 15.5px;
+        }
+
+        .docs-section p,
+        .docs-section li,
+        .docs-section dd {
+          font-size: 14.5px;
+          line-height: 1.7;
+        }
+
+        /* Long identifiers and paths must wrap instead of forcing a
+           horizontal scrollbar across the whole page. */
+        .docs-section code {
+          white-space: normal;
+          overflow-wrap: anywhere;
+          word-break: break-word;
+        }
+
+        .docs-section th,
+        .docs-section td {
+          padding: 8px 10px;
+        }
+
+        p.note {
+          padding: 10px 12px;
+        }
+
+        .docs-cta {
+          margin: 26px 0 10px;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .docs {
+          padding: 16px 14px 52px;
+        }
+
+        .docs-section th,
+        .docs-section td {
+          padding: 7px 8px;
+        }
+      }
+
+      /* Respect users who do not want smooth scrolling. */
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
       }
     </style>
 
