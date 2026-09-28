@@ -521,11 +521,15 @@ const shortcuts = [
           <ul>
             <li><b>Pipe annotations:</b> diameter, length, flow, velocity, head loss — each a toggle. Simulation-dependent ones need a completed run.</li>
             <li><b>Junction annotations:</b> label, elevation, pressure, demand — again all toggles.</li>
-            <li><b>Pipe color by range:</b> pick a property (diameter, velocity, flow, head loss) and define min/max/color bands, like "3 in → blue, 4 in → green, 6 in → yellow". Values outside every band use the "Outside ranges" color.</li>
+            <li><b>Pipe color by range:</b> pick a property (diameter, length, roughness, velocity, flow, head loss) and define min/max/color bands, like "3 in → blue, 4 in → green, 6 in → yellow". Values outside every band use the "Outside ranges" color.</li>
+            <li><b>Junction color by range:</b> the same for nodes — color them by elevation, pressure, demand, or head over min/max/color bands. This takes over from the automatic pressure gradient, so you see exactly the ranges you defined.</li>
+            <li><b>Auto ranges:</b> instead of typing bands by hand, choose a class count (3–6) and press <b>Auto</b> — the network is split into equal-count classes across the chosen property, with the standard blue→green→yellow→orange→red ramp. A swatch legend under the ranges shows each band and its value, in the current unit system.</li>
           </ul>
           <p>
-            The same toggles drive the DXF and KML exports, so a drafting sheet or Google Earth file
-            shows exactly the labels you see on screen.
+            The same toggles and color ranges drive the DXF and KML exports, so a drafting sheet or
+            Google Earth file shows exactly the labels and colors you see on screen. A junction theme
+            also puts nodes on a separate <code>JUNCTIONS-THEMED</code> DXF layer so themed elements
+            can be styled or frozen independently in CAD.
           </p>
         </section>
 
