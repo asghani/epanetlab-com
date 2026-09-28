@@ -81,6 +81,8 @@ const commands = [
   ["KMLIN", "—", "Import a Google Earth KML/KMZ file"],
   ["KMLOUT", "—", "Export the layout as .kml"],
   ["KMZOUT", "—", "Export the layout as zipped .kmz"],
+  ["SHPIN", "—", "Import an ESRI shapefile (.shp/.dbf/.shx/.prj or .zip)"],
+  ["SHPOUT", "—", "Export the network as ESRI shapefiles (.zip)"],
   ["CLEAR", "CLS", "Clear network"],
   ["EXIT", "QUIT, CLOSE", "Close"],
 ];
@@ -461,6 +463,24 @@ const shortcuts = [
             <code>LineString</code> placemark. Each placemark's description carries the same
             annotation text the map shows, and thematic pipe ranges set the line colors — handy for
             reviewing the model in Google Earth or sharing a layout with non-Hydraulic viewers.
+          </p>
+          <h3>GIS shapefile (SHPIN / SHPOUT)</h3>
+          <p>
+            <b>Export shapefile</b> — the <code>SHPOUT</code> command (or the Export menu) — downloads a
+            zipped pair of ESRI shapefiles: <code>…_points</code> (junctions, meters, demand centers,
+            tanks, reservoirs) and <code>…_lines</code> (pipes — bends become multi-vertex polylines —
+            plus pumps and valves). Each set ships its <code>.shx</code> index, a <code>.dbf</code>
+            attribute table (type, label, and for lines from/to node tags, diameter, length, roughness,
+            and pump power / valve setting), and a <code>.prj</code> written for the network's UTM zone.
+            The coordinates are real easting/northing — the same meter frame as the DXF export — so the
+            layout lands at its true position in QGIS / ArcGIS / AutoCAD Map 3D.
+          </p>
+          <p>
+            <b>Import shapefile</b> — the toolbar button or <code>SHPIN</code> — accepts a
+            <code>.zip</code> or the <code>.shp/.dbf/.shx/.prj</code> set. When a <code>.prj</code> is
+            present the coordinates are reprojected to lon/lat and placed automatically; a bare
+            <code>.shp</code> without one opens the positioning dialog. A zip from <code>SHPOUT</code>
+            re-imports exactly where it was exported.
           </p>
         </section>
 
