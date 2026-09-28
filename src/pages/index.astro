@@ -18,12 +18,12 @@ const features = [
   {
     icon: "import",
     title: "Import real plans",
-    text: "Upload .inp files, shapefiles or DXF drawings — including fillets, arcs and splines — as editable models or colored background layers.",
+    text: "Upload shapefiles or DXF drawings — including fillets, arcs and splines — as editable models or colored background layers.",
   },
   {
     icon: "run",
     title: "Run simulations instantly",
-    text: "Steady-state and extended-period analysis powered by the EPANET engine, running entirely in your browser via WebAssembly.",
+    text: "Steady-state analysis powered by the EPANET engine, running entirely in your browser via WebAssembly.",
   },
   {
     icon: "results",
@@ -38,7 +38,7 @@ const features = [
   {
     icon: "file",
     title: "EPANET file compatible",
-    text: "Import and export .inp files with no conversion. Interoperable with the EPANET ecosystem you already use.",
+    text: "Export .inp files with no conversion. Interoperable with the EPANET ecosystem you already use.",
   },
 ];
 
@@ -50,13 +50,13 @@ const audience = [
   },
   {
     code: "W02",
-    title: "Educators & professors",
-    text: "Teach the concepts without fighting software. Students draw real networks and run sims in minutes, not hours.",
+    title: "Municipal engineers",
+    text: "Screen alternatives against real service-area data before the capital request goes to the board. Undo/redo and auto-elevations keep long build-outs manageable.",
   },
   {
     code: "W03",
-    title: "Students & new engineers",
-    text: "Focus on learning, not software quirks. Undo/redo, auto-elevations and visual overlays help you learn water modeling quickly.",
+    title: "Asset management teams",
+    text: "Model a network, export EPANET .inp and GIS shapefiles, and hand the results straight to the rest of the toolchain. No desktop installs, no license server.",
   },
 ];
 
@@ -75,7 +75,7 @@ const faqs = [
   },
   {
     q: "Can I import my existing EPANET files?",
-    a: "Yes. Import .inp files, or go straight from GIS by uploading shapefiles and DXF drawings — including curves like fillet arcs and splines — as editable models or background layers.",
+    a: "Import is available from GIS: upload shapefiles or DXF drawings — including curves like fillet arcs and splines — as editable models or background layers. Once the network is built you can export a .inp file for the rest of the EPANET ecosystem.",
   },
   {
     q: "Can I export to .inp?",
@@ -271,7 +271,7 @@ const heroLinks = [
             </a>
             <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
           </div>
-          <p class="hero-meta">Steady-state &amp; extended-period simulation · in-browser wasm · .inp import/export</p>
+          <p class="hero-meta">Steady-state simulation · in-browser wasm · .inp export</p>
         </div>
 
         <div class="hero-diagram" aria-hidden="true">
@@ -380,9 +380,9 @@ const heroLinks = [
                 infrastructure workflows. With a strong technical background in
                 environmental engineering and spatial data integration, the
                 founder built EPANetLab to bring fast, local-first, and
-                browser-based hydraulic modeling directly to engineers,
-                utilities, and students — bridging the gap between complex
-                engineering calculations and clean, modern web software.
+                browser-based hydraulic modeling directly to engineers and
+                utilities — bridging the gap between complex engineering
+                calculations and clean, modern web software.
               </p>
               <div class="founder-calls">
                 <span>Water · wastewater · drainage design</span>
