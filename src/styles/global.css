@@ -279,6 +279,10 @@ img {
   color: var(--accent-ink);
 }
 
+.nav-desktop {
+  display: block;
+}
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -298,10 +302,116 @@ img {
   color: var(--ink);
 }
 
+/* Current page. Scoped to aria-current so it only lights up on the real
+   active link, whichever nav (desktop row or mobile panel) renders it. */
+.nav-links a[aria-current="page"],
+.nav-menu-panel a[aria-current="page"] {
+  color: var(--accent);
+}
+
 .nav-right {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+/* --------------------------------------------------------------------------- */
+/* Mobile menu (disclosure, <details> based — no JS)                             */
+/* --------------------------------------------------------------------------- */
+
+.nav-menu {
+  display: none;
+  position: relative;
+}
+
+.nav-menu > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+  background: var(--bg-panel);
+  flex-shrink: 0;
+}
+
+.nav-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.nav-menu > summary:hover {
+  border-color: var(--border-strong);
+}
+
+.nav-menu > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Bars by default, an X while open. */
+.nav-menu .icon-close {
+  display: none;
+}
+
+.nav-menu[open] .icon-bars {
+  display: none;
+}
+
+.nav-menu[open] .icon-close {
+  display: block;
+}
+
+.nav-menu-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 60;
+  min-width: 200px;
+  padding: 8px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.nav-menu-panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu-panel li + li {
+  border-top: 1px solid var(--border);
+}
+
+.nav-menu-panel a {
+  display: block;
+  padding: 11px 12px;
+  border-radius: 5px;
+  color: var(--ink-muted);
+  font-size: 14.5px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-menu-panel a:hover,
+.nav-menu-panel a:focus-visible {
+  color: var(--ink);
+  background: var(--bg-raised);
+  outline: none;
+}
+
+.nav-menu-panel a.nav-active {
+  color: var(--accent);
+}
+.nav-menu-panel .nav-menu-cta {
+  color: var(--accent-ink);
+  font-weight: 700;
 }
 
 .live-chip {
@@ -868,6 +978,11 @@ img {
 @media (max-width: 768px) {
   .nav-links {
     display: none;
+  }
+
+  /* Show the disclosure menu in place of the inline link row. */
+  .nav-menu {
+    display: block;
   }
 
   .nav {

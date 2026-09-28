@@ -1,0 +1,123 @@
+---
+/**
+ * Shared site header.
+ *
+ * `current` marks the active page so its link can be styled, and the links
+ * themselves are absolute so they work from /docs/ as well as the root.
+ *
+ * Below 768px the inline link row is hidden (see global.css), so a
+ * disclosure menu is rendered alongside it. It is a plain <details> element:
+ * it works with no JavaScript, is keyboard-operable for free, and cannot get
+ * stuck in an open state.
+ */
+interface Props {
+  current?: "" | "docs";
+}
+
+const { current = "" } = Astro.props;
+
+const links = [
+  { href: "/#features", label: "Features" },
+  { href: "/#founder", label: "Founder" },
+  { href: "/#faq", label: "FAQ" },
+  { href: "/docs/", label: "Docs" },
+];
+
+const appUrl = "https://app.epanetlab.com";
+---
+
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="/">
+      <img src="/logo.png" alt="EPANetLab logo" width="32" height="32" />
+      <span>EPANetLab<span class="brand-dot">.com</span></span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Main">
+      <ul class="nav-links">
+        {
+          links.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                aria-current={
+                  current === "docs" && l.href === "/docs/" ? "page" : undefined
+                }
+              >
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="nav-right">
+      <span class="live-chip"><span class="dot" aria-hidden="true"></span> Live</span>
+      <a class="btn btn-primary" href={appUrl} target="_blank" rel="noopener">
+        Launch the app
+      </a>
+      <details class="nav-menu">
+        <summary aria-label="Open menu">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path class="icon-bars" d="M4 7h16M4 12h16M4 17h16"></path>
+            <path class="icon-close" d="M6 6l12 12M18 6L6 18"></path>
+          </svg>
+        </summary>
+        <nav class="nav-menu-panel" aria-label="Mobile">
+          <ul>
+            {
+              links.map((l) => (
+                <li>
+                  <a
+                    href={l.href}
+                    aria-current={
+                      current === "docs" && l.href === "/docs/" ? "page" : undefined
+                    }
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))
+            }
+            <li>
+              <a class="nav-menu-cta" href={appUrl} target="_blank" rel="noopener">
+                Launch the app
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Close the menu on outside click and on Escape. Progressive enhancement:
+  // <details> already toggles on its own, this only tidies up the open state.
+  const menu = document.querySelector<HTMLDetailsElement>(".nav-menu");
+
+  if (menu) {
+    document.addEventListener("click", (e) => {
+      if (menu.open && !menu.contains(e.target as Node)) {
+        menu.open = false;
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && menu.open) {
+        menu.open = false;
+        (menu.querySelector("summary") as HTMLElement | null)?.focus();
+      }
+    });
+  }
+</script>

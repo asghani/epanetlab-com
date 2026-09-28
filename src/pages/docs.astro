@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Icon from "../components/Icon.astro";
+import SiteHeader from "../components/SiteHeader.astro";
 import Analytics from "@vercel/analytics/astro";
 
 const appUrl = "https://app.epanetlab.com";
@@ -156,28 +157,8 @@ const shortcuts = [
     })} />
   </head>
   <body>
-    <header class="site-header">
-      <div class="container nav">
-        <a class="brand" href="/">
-          <img src="/logo.png" alt="EPANetLab logo" width="32" height="32" />
-          <span>EPANetLab<span class="brand-dot">.com</span></span>
-        </a>
-        <nav aria-label="Main">
-          <ul class="nav-links">
-            <li><a href="/#features">Features</a></li>
-            <li><a href="/#founder">Founder</a></li>
-            <li><a href="/#faq">FAQ</a></li>
-            <li><a href="/docs/" class="nav-active">Docs</a></li>
-          </ul>
-        </nav>
-        <div class="nav-right">
-          <span class="live-chip"><span class="dot" aria-hidden="true"></span> Live</span>
-          <a class="btn btn-primary" href={appUrl} target="_blank" rel="noopener">
-            Launch the app
-          </a>
-        </div>
-      </div>
-    </header>
+      <SiteHeader current="docs" />
+
 
       <div class="docs">
         <aside class="docs-toc" aria-label="Documentation contents">
@@ -714,10 +695,6 @@ const shortcuts = [
     </footer>
 
     <style>
-      .nav-active {
-        color: var(--ink) !important;
-      }
-
       .docs {
         display: grid;
         grid-template-columns: 264px minmax(0, 1fr);
